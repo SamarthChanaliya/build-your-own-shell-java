@@ -8,7 +8,7 @@ public class Main {
         while (true) {
             System.out.print("$ ");
             String command = userInput.nextLine();
-            if (command.equalsIgnoreCase("q")) {
+            if (command.equalsIgnoreCase("exit")) {
                 break;
             }
             System.out.println(command + ": command not found");
