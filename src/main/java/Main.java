@@ -51,7 +51,7 @@ public class Main
                     }
                     else if (command.equalsIgnoreCase("type")) 
                     {
-                        if (builtinCommands.contains(command)) 
+                        if (builtinCommands.contains(prompt.substring(command.length() + 1))) 
                         {
                             System.out.println(arguments + " is a shell builtin");
                         }
