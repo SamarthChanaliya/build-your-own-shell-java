@@ -22,21 +22,27 @@ public class Main {
             String prompt = userInput.nextLine();
             String arguments = "";
 
+            boolean commandFound = false;
+
+            
             for (String command : builtinCommands) {
 
                 if (prompt.length() > command.length()) {
                     arguments = prompt.substring(command.length() + 1);
                 }
 
+                
+
                 if (prompt.startsWith(command)) {
 
-                    // exit
+                    commandFound = true;
+
                     if (command.equals("exit")) {
                         running = false;
+                        
                         break;
                     }
 
-                    // echo
                     else if (command.equals("echo")) {
                         if (prompt.length() <= command.length()) {
                             System.out.println();
@@ -46,7 +52,6 @@ public class Main {
                         break;
                     }
 
-                    // type
                     else if (command.equals("type")) {
                         if (builtinCommands.contains(arguments)) {
                             System.out.println(arguments + " is a shell builtin");
@@ -56,6 +61,9 @@ public class Main {
                         break;
                     }
                 }
+            }
+            if (!commandFound) {
+                System.out.println(prompt + ": command not found");
             }
         }
 
