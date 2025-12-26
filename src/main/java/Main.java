@@ -1,72 +1,64 @@
-//Code Crafters
-//Build your own shell
+// Code Crafters
+// Build your own shell
 // progress - 4/42
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main 
-{
-    public static void main(String[] args) throws Exception 
-    {
+public class Main {
+    public static void main(String[] args) throws Exception {
+
         Scanner userInput = new Scanner(System.in);
-        boolean running = true;
 
         ArrayList<String> builtinCommands = new ArrayList<>();
-
         builtinCommands.add("exit");
         builtinCommands.add("echo");
         builtinCommands.add("type");
-        
 
-        while (running) 
-        {
+        boolean running = true;
+
+        while (running) {
             System.out.print("$ ");
             String prompt = userInput.nextLine();
-            String arguments = null;
-            
-            for (String command : builtinCommands) 
-            {
-                if (prompt.length() > command.length()) 
-                {
+            String arguments = "";
+
+            for (String command : builtinCommands) {
+
+                if (prompt.length() > command.length()) {
                     arguments = prompt.substring(command.length() + 1);
                 }
-                if (prompt.startsWith(command)) 
-                {
-                    if (command.equalsIgnoreCase("exit")) 
-                    {
+
+                if (prompt.startsWith(command)) {
+
+                    // exit
+                    if (command.equals("exit")) {
                         running = false;
                         break;
                     }
-                    else if (command.equalsIgnoreCase("echo")) 
-                    {
-                        if (prompt.length() <= command.length()) 
-                        {
+
+                    // echo
+                    else if (command.equals("echo")) {
+                        if (prompt.length() <= command.length()) {
                             System.out.println();
-                        }
-                        else
-                        {
+                        } else {
                             System.out.println(arguments);
                         }
+                        break;
                     }
-                    else if (command.equalsIgnoreCase("type")) 
-                    {
-                        if (builtinCommands.contains(prompt.substring(command.length() + 1))) 
-                        {
+
+                    // type
+                    else if (command.equals("type")) {
+                        if (builtinCommands.contains(arguments)) {
                             System.out.println(arguments + " is a shell builtin");
-                        }
-                        else
-                        {
+                        } else {
                             System.out.println(arguments + ": not found");
                         }
-                    }
-                    else
-                    {
-                        System.out.println(prompt + ": command not found");
+                        break;
                     }
                 }
             }
         }
+
         userInput.close();
     }
 }
