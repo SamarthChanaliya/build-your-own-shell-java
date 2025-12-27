@@ -1,6 +1,6 @@
-// Code Crafters
+// CodeCrafters
 // Build your own shell
-// progress - 7/42
+// progress - 8/42
 
 import java.io.BufferedReader;
 import java.io.File;
