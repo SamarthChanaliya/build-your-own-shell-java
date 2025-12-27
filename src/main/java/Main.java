@@ -34,47 +34,43 @@ public class Main {
             String arguments = "";
 
             boolean commandFoundInBuiltin = false;
-            boolean commandFoundInPath = false;
-            
 
-            
+
+            label:
             for (String command : builtinCommands) {
 
                 if (prompt.length() > command.length()) {
                     arguments = prompt.substring(command.length() + 1);
                 }
 
-                
+
 
                 if (prompt.startsWith(command)) {
 
                     commandFoundInBuiltin = true;
 
-                    if (command.equals("exit")) {
-                        running = false;
-                        
-                        break;
-                    }
+                    switch (command) {
+                        case "exit":
+                            running = false;
 
-                    else if (command.equals("echo")) {
-                        if (prompt.length() <= command.length()) {
-                            System.out.println();
-                        } else {
-                            System.out.println(arguments);
-                        }
-                        break;
-                    }
-
-                    else if (command.equals("type")) {
-                        Path foundPath = findInPath(arguments, dirs);
-                        if (builtinCommands.contains(arguments)) {
-                            System.out.println(arguments + " is a shell builtin");
-                        } else if (foundPath != null) {
-                            System.out.println(arguments + " is " + foundPath);
-                        } else {
-                            System.out.println(arguments + ": not found");
-                        }
-                        break;
+                            break label;
+                        case "echo":
+                            if (prompt.length() == command.length()) {
+                                System.out.println();
+                            } else {
+                                System.out.println(arguments);
+                            }
+                            break label;
+                        case "type":
+                            Path foundPath = findInPath(arguments, dirs);
+                            if (builtinCommands.contains(arguments)) {
+                                System.out.println(arguments + " is a shell builtin");
+                            } else if (foundPath != null) {
+                                System.out.println(arguments + " is " + foundPath);
+                            } else {
+                                System.out.println(arguments + ": not found");
+                            }
+                            break label;
                     }
                 }
             }
