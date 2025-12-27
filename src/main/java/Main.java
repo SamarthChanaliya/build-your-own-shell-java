@@ -81,11 +81,13 @@ public class Main {
             if (!commandFoundInBuiltin) {
                 String[] promptArgs = prompt.split(" ");
                 String command = promptArgs[0];
-                Path externalCommandFound = findInPath(command,dirs);//System.out.println(prompt + ": command not found");
+                Path externalCommandFound = findInPath(command,dirs);
                 if (externalCommandFound != null){
                     executeCommand(promptArgs);
-
+                    break;
                 }
+            }else{
+                System.out.println(prompt + ": command not found");
             }
         }
 
