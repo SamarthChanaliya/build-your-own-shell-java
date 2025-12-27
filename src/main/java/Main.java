@@ -86,7 +86,8 @@ public class Main {
     // use Files.walk to find the command name in the array of directories
     public static Path findInPath(String commandName, String[] directories) throws IOException{
         for (String directory : directories) {
-            Path path = Path.of(directory);
+            String fullPath = directory + "/" + commandName;
+            Path path = Path.of(fullPath);
             if (Files.exists(path) || Files.isExecutable(path)) {
                 return path;
             }
