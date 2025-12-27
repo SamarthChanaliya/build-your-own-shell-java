@@ -1,15 +1,17 @@
 // Code Crafters
 // Build your own shell
-// progress - 4/42
+// progress - 7/42
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -31,7 +33,8 @@ public class Main {
             String prompt = userInput.nextLine();
             String arguments = "";
 
-            boolean commandFound = false;
+            boolean commandFoundInBuiltin = false;
+            boolean commandFoundInPath = false;
             
 
             
@@ -45,7 +48,7 @@ public class Main {
 
                 if (prompt.startsWith(command)) {
 
-                    commandFound = true;
+                    commandFoundInBuiltin = true;
 
                     if (command.equals("exit")) {
                         running = false;
@@ -75,15 +78,20 @@ public class Main {
                     }
                 }
             }
-            if (!commandFound) {
-                System.out.println(prompt + ": command not found");
+            if (!commandFoundInBuiltin) {
+                String[] promptArgs = prompt.split(" ");
+                String command = promptArgs[0];
+                Path externalCommandFound = findInPath(command,dirs);//System.out.println(prompt + ": command not found");
+                if (externalCommandFound != null){
+                    executeCommand(promptArgs);
+
+                }
             }
         }
 
         userInput.close();
     }
 
-    // use Files.walk to find the command name in the array of directories
     public static Path findInPath(String commandName, String[] directories) throws IOException{
         for (String directory : directories) {
             Path path = Path.of(directory,commandName);
@@ -92,5 +100,17 @@ public class Main {
             }
         }
         return null;
+    }
+
+    public static void executeCommand(String[] command) throws IOException {
+        List<String> commandList = Arrays.asList(command);
+        ProcessBuilder processBuilder = new ProcessBuilder(commandList);
+        Process process = processBuilder.start();
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        while ((line = reader.readLine())  != null){
+            System.out.println(line);
+        }
     }
 }
