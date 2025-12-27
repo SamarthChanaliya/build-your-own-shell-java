@@ -84,7 +84,6 @@ public class Main {
                 Path externalCommandFound = findInPath(command,dirs);
                 if (externalCommandFound != null){
                     executeCommand(promptArgs);
-                    break;
                 }
             }else{
                 System.out.println(prompt + ": command not found");
