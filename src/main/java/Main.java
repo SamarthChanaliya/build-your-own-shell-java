@@ -18,7 +18,7 @@ public class Main {
 
         Scanner userInput = new Scanner(System.in);
 
-        ArrayList<String> builtinCommands = new ArrayList<>();
+        List<String> builtinCommands = new ArrayList<>();
         builtinCommands.add("exit");
         builtinCommands.add("echo");
         builtinCommands.add("type");
@@ -26,74 +26,75 @@ public class Main {
         String path = System.getenv("PATH");
         String[] dirs = path.split(File.pathSeparator);
 
-        boolean running = true;
+        boolean isRunning = true;
 
-        while (running) {
+        while (isRunning) {
             System.out.print("$ ");
             String prompt = userInput.nextLine();
-            String arguments = "";
+//            String arguments = "";
 
             boolean commandFoundInBuiltin = false;
 
+            List<String> tokens = parseTokens(prompt);
+
+            String command = tokens.getFirst();
+            List<String> arguments = List.of();
+            if (command.length() > 1){
+                arguments = tokens.subList(1, tokens.size());
+            }
+
+            String parsedArgs = String.join(" ",arguments);
+
+
+
 
             label:
-            for (String command : builtinCommands) {
+            for (String builtinCommand : builtinCommands) {
 
-                if (prompt.length() > command.length()) {
-                    arguments = prompt.substring(command.length() + 1);
-                }
-
-
-
-                if (prompt.startsWith(command)) {
+                if (command.equals(builtinCommand)) {
 
                     commandFoundInBuiltin = true;
 
-                    switch (command) {
+                    switch (builtinCommand) {
                         case "exit":
-                            running = false;
+                            isRunning = false;
 
                             break label;
                         case "echo":
-                            if (prompt.length() == command.length()) {
+                            if (arguments.isEmpty()) {
                                 System.out.println();
                             } else {
-                                System.out.println(arguments);
+                                System.out.println(parsedArgs);
                             }
                             break label;
                         case "type":
-                            Path foundPath = findInPath(arguments, dirs);
-                            if (builtinCommands.contains(arguments)) {
-                                System.out.println(arguments + " is a shell builtin");
+                            Path foundPath = findInPath(parsedArgs, dirs);
+                            if (builtinCommands.contains(parsedArgs)) {
+                                System.out.println(parsedArgs + " is a shell builtin");
                             } else if (foundPath != null) {
-                                System.out.println(arguments + " is " + foundPath);
+                                System.out.println(parsedArgs + " is " + foundPath);
                             } else {
-                                System.out.println(arguments + ": not found");
+                                System.out.println(parsedArgs + ": not found");
                             }
                             break label;
                     }
                 }
             }
             if (!commandFoundInBuiltin) {
-                String[] promptArgs = prompt.split(" ");
-                String command = promptArgs[0];
-                Path externalCommandFound = findInPath(command,dirs);
-                if (externalCommandFound != null){
-                    executeCommand(promptArgs);
-                }
-                else{
+                Path externalCommandFound = findInPath(command, dirs);
+                if (externalCommandFound != null) {
+                    executeCommand(arguments);
+                } else {
                     System.out.println(prompt + ": command not found");
                 }
             }
-
         }
-
         userInput.close();
     }
 
-    public static Path findInPath(String commandName, String[] directories) throws IOException{
+    public static Path findInPath(String commandName, String[] directories) throws IOException {
         for (String directory : directories) {
-            Path path = Path.of(directory,commandName);
+            Path path = Path.of(directory, commandName);
             if (Files.exists(path) && Files.isExecutable(path)) {
                 return path;
             }
@@ -101,15 +102,33 @@ public class Main {
         return null;
     }
 
-    public static void executeCommand(String[] command) throws IOException {
-        List<String> commandList = Arrays.asList(command);
-        ProcessBuilder processBuilder = new ProcessBuilder(commandList);
+    public static void executeCommand(List<String> command) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line;
-        while ((line = reader.readLine())  != null){
+        while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
+    }
+
+    private static ArrayList<String> parseTokens(String input) {
+        final char WHITESPACE = ' ';
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<String> tokens = new ArrayList<>();
+
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) != WHITESPACE) {
+                stringBuilder.append(input.charAt(i));
+            } else if (input.charAt(i) == WHITESPACE && !stringBuilder.isEmpty()) {
+                tokens.add(stringBuilder.toString());
+                stringBuilder.setLength(0);
+            }
+        }
+        if (!stringBuilder.isEmpty()) {
+            tokens.add(stringBuilder.toString());
+        }
+        return tokens;
     }
 }
