@@ -129,17 +129,19 @@ public class Main {
             char inputCharacter = input.charAt(i);
             if (inputCharacter == SINGLE_QUOTE && !insideQuotes){
                 insideQuotes = true;
+                continue;
             } else if (inputCharacter == SINGLE_QUOTE) {
                 insideQuotes = false;
+                continue;
             }
-            if (inputCharacter != WHITE_SPACE && !insideQuotes && inputCharacter != SINGLE_QUOTE) {
+            if (inputCharacter != WHITE_SPACE && !insideQuotes) {
                 stringBuilder.append(inputCharacter);
             } else if (inputCharacter == WHITE_SPACE && !stringBuilder.isEmpty() && !insideQuotes ) {
                 tokens.add(stringBuilder.toString());
                 stringBuilder.setLength(0);
-            } else if (inputCharacter != WHITE_SPACE && insideQuotes && inputCharacter != SINGLE_QUOTE) {
+            } else if (inputCharacter != WHITE_SPACE) {
                 stringBuilder.append(inputCharacter);
-            } else if (inputCharacter == WHITE_SPACE && insideQuotes) {
+            } else if (insideQuotes) {
                 stringBuilder.append(inputCharacter);
             }
         }
