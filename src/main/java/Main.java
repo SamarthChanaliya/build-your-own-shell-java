@@ -83,7 +83,7 @@ public class Main {
             if (!commandFoundInBuiltin) {
                 Path externalCommandFound = findInPath(command, dirs);
                 if (externalCommandFound != null) {
-                    executeCommand(command, String.valueOf(arguments));
+                    executeCommand(command, parsedArgs);
                 } else {
                     System.out.println(command + ": command not found");
                 }
