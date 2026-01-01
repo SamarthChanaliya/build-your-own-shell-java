@@ -141,9 +141,10 @@ public class Main {
                 stringBuilder.setLength(0);
             } else if (inputCharacter != WHITE_SPACE) {
                 stringBuilder.append(inputCharacter);
-            } else if (insideQuotes) {
-                stringBuilder.append(inputCharacter);
             }
+//            else if (insideQuotes) {
+//                stringBuilder.append(inputCharacter);
+//            }
         }
         if (!stringBuilder.isEmpty()) {
             tokens.add(stringBuilder.toString());
