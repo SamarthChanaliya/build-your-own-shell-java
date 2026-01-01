@@ -30,21 +30,22 @@ public class Main {
         while (isRunning) {
             System.out.print("$ ");
             String prompt = userInput.nextLine();
-//            String arguments = "";
 
             boolean commandFoundInBuiltin = false;
 
             List<String> tokens = parseTokens(prompt);
-
-            String command = tokens.getFirst();
             List<String> arguments = List.of();
+            String command = "";
+
+            if (!tokens.isEmpty()){
+                command = tokens.getFirst();
+            }else continue;
+
+
             if (command.length() > 1){
                 arguments = tokens.subList(1, tokens.size());
             }
-
             String parsedArgs = String.join(" ",arguments);
-
-
 
 
             label:
