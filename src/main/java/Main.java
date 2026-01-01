@@ -35,7 +35,7 @@ public class Main {
 
             List<String> tokens = parseTokens(prompt);
             List<String> arguments = List.of();
-            String command = "";
+            String command;
 
             if (!tokens.isEmpty()){
                 command = tokens.getFirst();
