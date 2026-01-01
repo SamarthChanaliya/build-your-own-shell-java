@@ -84,7 +84,7 @@ public class Main {
                 Path externalCommandFound = findInPath(command, dirs);
                 if (externalCommandFound != null) {
                     try {
-                        executeCommand(command, parsedArgs);
+                        executeCommand(tokens);
                     } catch (IOException e) {
                         System.out.println(command + " is not a valid command");
                     }
@@ -106,8 +106,8 @@ public class Main {
         return null;
     }
 
-    public static void executeCommand(String command,String arguments) throws IOException {
-        ProcessBuilder processBuilder = new ProcessBuilder(command,arguments);
+    public static void executeCommand(List<String> command) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
         Process process = processBuilder.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
