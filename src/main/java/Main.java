@@ -113,16 +113,29 @@ public class Main {
     }
 
     private static ArrayList<String> parseTokens(String input) {
-        final char WHITESPACE = ' ';
+        final char WHITE_SPACE = ' ';
+        final char SINGLE_QUOTE = '\'';
+        boolean insideQuotes = false;
+
         StringBuilder stringBuilder = new StringBuilder();
         ArrayList<String> tokens = new ArrayList<>();
 
         for (int i = 0; i < input.length(); i++) {
-            if (input.charAt(i) != WHITESPACE) {
-                stringBuilder.append(input.charAt(i));
-            } else if (input.charAt(i) == WHITESPACE && !stringBuilder.isEmpty()) {
+            char inputCharacter = input.charAt(i);
+            if (inputCharacter == SINGLE_QUOTE && !insideQuotes){
+                insideQuotes = true;
+            } else if (inputCharacter == SINGLE_QUOTE) {
+                insideQuotes = false;
+            }
+            if (inputCharacter != WHITE_SPACE && !insideQuotes && inputCharacter != SINGLE_QUOTE) {
+                stringBuilder.append(inputCharacter);
+            } else if (inputCharacter == WHITE_SPACE && !stringBuilder.isEmpty() && !insideQuotes ) {
                 tokens.add(stringBuilder.toString());
                 stringBuilder.setLength(0);
+            } else if (inputCharacter != WHITE_SPACE && insideQuotes && inputCharacter != SINGLE_QUOTE) {
+                stringBuilder.append(inputCharacter);
+            } else if (inputCharacter == WHITE_SPACE && insideQuotes) {
+                stringBuilder.append(inputCharacter);
             }
         }
         if (!stringBuilder.isEmpty()) {
