@@ -25,9 +25,9 @@ public class Main {
         String path = System.getenv("PATH");
         String[] dirs = path.split(File.pathSeparator);
 
-        boolean isRunning = true;
+        boolean running = true;
 
-        while (isRunning) {
+        while (running) {
             System.out.print("$ ");
             String prompt = userInput.nextLine();
 
@@ -57,7 +57,7 @@ public class Main {
 
                     switch (builtinCommand) {
                         case "exit":
-                            isRunning = false;
+                            running = false;
 
                             break label;
                         case "echo":
@@ -83,7 +83,7 @@ public class Main {
             if (!commandFoundInBuiltin) {
                 Path externalCommandFound = findInPath(command, dirs);
                 if (externalCommandFound != null) {
-                    executeCommand(arguments);
+                    executeCommand(command, String.valueOf(arguments));
                 } else {
                     System.out.println(prompt + ": command not found");
                 }
@@ -102,8 +102,8 @@ public class Main {
         return null;
     }
 
-    public static void executeCommand(List<String> command) throws IOException {
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
+    public static void executeCommand(String command,String arguments) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(command,arguments);
         Process process = processBuilder.start();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
