@@ -96,7 +96,7 @@ public class Main {
         userInput.close();
     }
 
-    public static Path findInPath(String commandName, String[] directories) throws IOException {
+    public static Path findInPath(String commandName, String[] directories){
         for (String directory : directories) {
             Path path = Path.of(directory, commandName);
             if (Files.exists(path) && Files.isExecutable(path)) {
