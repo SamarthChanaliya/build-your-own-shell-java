@@ -85,7 +85,7 @@ public class Main {
                 if (externalCommandFound != null) {
                     executeCommand(command, String.valueOf(arguments));
                 } else {
-                    System.out.println(prompt + ": command not found");
+                    System.out.println(command + ": command not found");
                 }
             }
         }
