@@ -149,7 +149,7 @@ public class Main {
             } else if (inputCharacter == WHITE_SPACE && !charBuffer.isEmpty() && !insideSingleQuotes) {
                 tokenList.add(charBuffer.toString());
                 charBuffer.setLength(0);
-            } else if (insideSingleQuotes) {
+            } else if (insideSingleQuotes || insideDoubleQuotes) {
                 charBuffer.append(inputCharacter);
             }
         }
