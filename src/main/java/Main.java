@@ -146,7 +146,7 @@ public class Main {
             }
             if (inputCharacter != WHITE_SPACE && !insideSingleQuotes) {
                 charBuffer.append(inputCharacter);
-            } else if (inputCharacter == WHITE_SPACE && !charBuffer.isEmpty() && !insideSingleQuotes) {
+            } else if (inputCharacter == WHITE_SPACE && !charBuffer.isEmpty() && !insideSingleQuotes && !insideDoubleQuotes) {
                 tokenList.add(charBuffer.toString());
                 charBuffer.setLength(0);
             } else if (insideSingleQuotes || insideDoubleQuotes) {
