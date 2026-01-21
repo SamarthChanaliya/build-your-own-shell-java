@@ -143,7 +143,7 @@ public class Main {
                 isEscaped = false;
                 continue;
             }
-            if(isBackslash && !insideSingleQuotes){
+            if(isBackslash && !insideSingleQuotes && insideDoubleQuotes){
                 isEscaped = true;
                 continue;
             }
