@@ -136,13 +136,14 @@ public class Main {
             boolean isSingleQuote = inputCharacter == SINGLE_QUOTE;
             boolean isDoubleQuote = inputCharacter == DOUBLE_QUOTE;
             boolean isWhiteSpace = inputCharacter == WHITE_SPACE;
+            boolean isBackslash = inputCharacter == BACKSLASH;
 
             if (isEscaped){
                 charBuffer.append(inputCharacter);
                 isEscaped = false;
                 continue;
             }
-            if(inputCharacter == BACKSLASH && isOutside){
+            if(isBackslash && !insideSingleQuotes){
                 isEscaped = true;
                 continue;
             }
