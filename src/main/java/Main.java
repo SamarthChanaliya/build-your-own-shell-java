@@ -121,41 +121,54 @@ public class Main {
         final char WHITE_SPACE = ' ';
         final char SINGLE_QUOTE = '\'';
         final char DOUBLE_QUOTE = '\"';
+        final char BACKSLASH = '\\';
         boolean insideSingleQuotes = false;
         boolean insideDoubleQuotes = false;
+        boolean isEscaped = false;
 
         StringBuilder charBuffer = new StringBuilder();
-        ArrayList<String> tokenList = new ArrayList<>();
+        ArrayList<String> tokens = new ArrayList<>();
 
         for (int i = 0; i < input.length(); i++) {
             char inputCharacter = input.charAt(i);
+            boolean isOutside = !insideDoubleQuotes && !insideSingleQuotes;
+            boolean isSingleQuote = inputCharacter == SINGLE_QUOTE;
+            boolean isDoubleQuote = inputCharacter == DOUBLE_QUOTE;
+            boolean isWhiteSpace = inputCharacter == WHITE_SPACE;
 
-            if (inputCharacter == SINGLE_QUOTE && !insideSingleQuotes && !insideDoubleQuotes) {
-                insideSingleQuotes = true;
-                continue;
-            } else if (inputCharacter == SINGLE_QUOTE && !insideDoubleQuotes) {
-                insideSingleQuotes = false;
+            if (isEscaped){
+                charBuffer.append(inputCharacter);
+                isEscaped = false;
                 continue;
             }
-            if (inputCharacter == DOUBLE_QUOTE && !insideDoubleQuotes && !insideSingleQuotes) {
-                insideDoubleQuotes = true;
-                continue;
-            } else if (inputCharacter == DOUBLE_QUOTE && !insideSingleQuotes) {
-                insideDoubleQuotes = false;
+            if(inputCharacter == BACKSLASH){
+                isEscaped = true;
                 continue;
             }
-            if (inputCharacter != WHITE_SPACE && !insideSingleQuotes) {
+            if (isSingleQuote && !insideDoubleQuotes) {
+                insideSingleQuotes = !insideSingleQuotes;
+                continue;
+            }
+            if (isDoubleQuote && !insideSingleQuotes) {
+                insideDoubleQuotes = !insideDoubleQuotes;
+                continue;
+            }
+            if (!isWhiteSpace && !insideSingleQuotes) {
                 charBuffer.append(inputCharacter);
-            } else if (inputCharacter == WHITE_SPACE && !charBuffer.isEmpty() && !insideSingleQuotes && !insideDoubleQuotes) {
-                tokenList.add(charBuffer.toString());
-                charBuffer.setLength(0);
-            } else if (insideSingleQuotes || insideDoubleQuotes) {
-                charBuffer.append(inputCharacter);
+            } else {
+                if (isWhiteSpace && isOutside) {
+                    if (!charBuffer.isEmpty()){
+                        tokens.add(charBuffer.toString());
+                        charBuffer.setLength(0);
+                    }
+                } else {
+                    charBuffer.append(inputCharacter);
+                }
             }
         }
         if (!charBuffer.isEmpty()) {
-            tokenList.add(charBuffer.toString());
+            tokens.add(charBuffer.toString());
         }
-        return tokenList;
+        return tokens;
     }
 }
