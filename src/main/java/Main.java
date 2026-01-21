@@ -98,7 +98,6 @@ public class Main {
     }
 
     public static Path findInPath(String commandName, String[] directories) {
-        System.out.println(commandName);
         for (String directory : directories) {
             Path path = Path.of(directory, commandName);
             if (Files.exists(path) && Files.isExecutable(path)) {
