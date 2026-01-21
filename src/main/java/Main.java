@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -42,13 +43,13 @@ public class Main {
             } else continue;
 
 
-            if (command.length() > 1) {
+            if (tokens.size() > 1) {
                 arguments = tokens.subList(1, tokens.size());
             }
             String parsedArgs = String.join(" ", arguments);
 
 
-            label:
+            builtinCheck:
             for (String builtinCommand : builtinCommands) {
 
                 if (command.equals(builtinCommand)) {
@@ -59,14 +60,14 @@ public class Main {
                         case "exit":
                             running = false;
 
-                            break label;
+                            break builtinCheck;
                         case "echo":
                             if (arguments.isEmpty()) {
                                 System.out.println();
                             } else {
                                 System.out.println(parsedArgs);
                             }
-                            break label;
+                            break builtinCheck;
                         case "type":
                             Path foundPath = findInPath(parsedArgs, dirs);
                             if (builtinCommands.contains(parsedArgs)) {
@@ -76,7 +77,7 @@ public class Main {
                             } else {
                                 System.out.println(parsedArgs + ": not found");
                             }
-                            break label;
+                            break builtinCheck;
                     }
                 }
             }
@@ -97,6 +98,7 @@ public class Main {
     }
 
     public static Path findInPath(String commandName, String[] directories) {
+        System.out.println(commandName);
         for (String directory : directories) {
             Path path = Path.of(directory, commandName);
             if (Files.exists(path) && Files.isExecutable(path)) {
@@ -141,7 +143,7 @@ public class Main {
                 isEscaped = false;
                 continue;
             }
-            if(inputCharacter == BACKSLASH && !insideSingleQuotes){
+            if(inputCharacter == BACKSLASH && isOutside){
                 isEscaped = true;
                 continue;
             }
