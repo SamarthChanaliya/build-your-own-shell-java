@@ -143,9 +143,17 @@ public class Main {
                 isEscaped = false;
                 continue;
             }
-            if(isBackslash && !insideSingleQuotes && insideDoubleQuotes){
-                isEscaped = true;
-                continue;
+            if(isBackslash && !insideSingleQuotes){
+                if (insideDoubleQuotes){
+                    char next = input.charAt(i + 1);
+                    if (next == '"' || next == '\\' || next == '$' || next == '`' || next == '\n'){
+                        isEscaped = true;
+                        continue;
+                    }
+                }else {
+                    isEscaped = true;
+                    continue;
+                }
             }
             if (isSingleQuote && !insideDoubleQuotes) {
                 insideSingleQuotes = !insideSingleQuotes;
